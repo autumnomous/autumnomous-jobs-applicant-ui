@@ -1,8 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router";
+import Cookies from 'js-cookie'
 import Home from "../views/Home.vue";
 import SignUp from "../views/SignUp.vue"
 import Login from "../views/Login.vue"
 import CompleteRegistration from "../views/CompleteRegistration.vue"
+import Dashboard from "../views/Dashboard.vue"
+import Listing from '../views/Listing.vue'
+import JobView from '../components/listing/JobView.vue'
+import Error400 from '../views/errors/Error400.vue'
 
 const routes = [
   {
@@ -27,11 +32,50 @@ const routes = [
   {
     path: '/applicant/login',
     name: 'Applicant Login',
-    component: Login
-  },{
+    component: Login,
+    beforeEnter:(to, from, next)=>{
+      const token = Cookies.get('com.bitjobs')
+
+      if(token){
+        next('/applicant/dashboard')
+      }
+      next()
+    }
+  },
+  {
     path: '/applicant/registration',
     name: 'Applicant Registration',
     component: CompleteRegistration
+  },
+  {
+    path: '/applicant/dashboard',
+    name: 'Applicant Dashboard',
+    component: Dashboard
+  },
+  {
+    path:'/job-list/:slug',
+    name:'job',
+    component: JobView
+  },
+  // {
+  //   path: '/applicant/profile',
+  //   name: 'Applicant Profile',
+  //   component: Dashboard
+  // },
+  // {
+  //   path: '/applicant/account',
+  //   name: 'Applicant Account',
+  //   component: Dashboard
+  // },
+  {
+    path: '/error/400',
+    name: 'Error 400',
+    component: Error400
+  },
+  {
+    path: '/listing',
+    name: 'Listing',
+    component: Listing
   },
 ];
 
