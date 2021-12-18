@@ -24154,3 +24154,93 @@ a:hover .text-hover-primary {
 /*------------------------------------
   File for your custom SCSS style
 ------------------------------------*/
+
+/*------------------------------------
+  Input Card
+------------------------------------*/
+.input-card {
+  display: -ms-flexbox;
+  display: flex;
+  background-color: #fff;
+  padding: 0.6125rem 0.6125rem;
+  box-shadow: 0rem 0.375rem 1.5rem 0rem rgba(140, 152, 164, 0.125);
+  border-radius: 0.5rem;
+}
+
+.input-card .input-card-form {
+  -ms-flex: 1 0 0%;
+      flex: 1 0 0%;
+}
+
+.input-card .btn {
+  -ms-flex: 0 0 auto;
+      flex: 0 0 auto;
+}
+
+.input-card .form-control {
+  border-width: 0;
+}
+
+.input-card .form-control:focus {
+  box-shadow: none;
+}
+
+.input-card .input-group {
+  border-width: 0;
+}
+
+.input-card .input-card-form {
+  position: relative;
+}
+
+.input-card .input-card-form:not(:first-child) {
+  padding-left: 1rem;
+}
+
+.input-card .input-card-form:not(:first-child)::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 0.0625rem;
+  height: 2rem;
+  background-color: rgba(33, 50, 91, 0.1);
+  content: '';
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+
+.input-card .input-card-form:not(:last-child) {
+  padding-right: 1rem;
+}
+
+@media (min-width: 576px) {
+  .input-card-pill {
+    border-radius: 50rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .input-card-sm {
+    display: grid;
+  }
+  .input-card-sm .btn,
+  .input-card-sm .input-card-form {
+    -ms-flex: 0 0 auto;
+        flex: 0 0 auto;
+  }
+  .input-card-sm .input-card-form {
+    padding: 1rem 0 !important;
+    border-bottom: 0.0625rem solid rgba(33, 50, 91, 0.1);
+  }
+  .input-card-sm .input-card-form:first-child {
+    padding-top: 0 !important;
+  }
+  .input-card-sm .input-card-form:not(:first-child)::before {
+    display: none;
+  }
+}
+
+.content-space-2 {
+  padding-top: 5rem !important;
+  padding-bottom: 5rem !important;
+}
