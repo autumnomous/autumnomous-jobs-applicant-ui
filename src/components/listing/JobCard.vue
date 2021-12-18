@@ -29,7 +29,7 @@
                                 <a class="text-dark" :href="job.companyurl">{{job.companyname}}</a>
                             </h6>
                         
-                            <p class="pt-1">Cleveland, Ohio</p>
+                            <p class="pt-1">{{job.companylocation}}</p>
 
                         </div>
                     </div>
