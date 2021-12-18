@@ -36,27 +36,7 @@
                   <div class="step-content-wrapper" href="">
                     <span class="step-icon step-icon-soft-dark">3</span>
                     <div class="step-content">
-                      <span class="step-title">Enter Company Details</span>
-                      <span class="step-title-description step-text font-size-1"></span>
-                    </div>
-                  </div>
-                </li>
-
-                <li class="step-item">
-                  <div class="step-content-wrapper" href="">
-                    <span class="step-icon step-icon-soft-dark">4</span>
-                    <div class="step-content">
-                      <span class="step-title">Select Payment Method</span>
-                      <span class="step-title-description step-text font-size-1"></span>
-                    </div>
-                  </div>
-                </li>
-
-                <li class="step-item" >
-                  <div class="step-content-wrapper" href="">
-                    <span class="step-icon step-icon-soft-dark">5</span>
-                    <div class="step-content">
-                      <span class="step-title">Enter Payment Method Details</span>
+                      <span class="step-title">Enter Job Preferences</span>
                       <span class="step-title-description step-text font-size-1"></span>
                     </div>
                   </div>
@@ -72,7 +52,7 @@
             <!-- Content Step Form -->
             <div id="postJobStepFormContent">
 
-                <component :is="activeStep" @next-step="nextStep" :employer="employer" :active="activeStep"></component>
+                <component :is="activeStep" @next-step="nextStep" :applicant="applicant" :active="activeStep"></component>
 
             </div>
             <!-- End Content Step Form -->
@@ -99,9 +79,7 @@
 
   import ChangePassword from '../components/registration/ChangePassword.vue'
   import PersonalInformation from '../components/registration/PersonalInformation.vue'
-  import CompanyDetails from '../components/registration/CompanyDetails.vue'
-  import PaymentMethod from '../components/registration/PaymentMethod.vue'
-  import PaymentDetails from '../components/registration/PaymentDetails.vue'
+  import JobPreferences from '../components/registration/JobPreferences.vue'
   import RegistrationComplete from '../components/registration/RegistrationComplete.vue'
 
   export default {
@@ -111,28 +89,28 @@
           
           this.token = this.$cookies.get('com.bitjobs');
           
-          // this.employer = await fetch(process.env.VUE_APP_BIT_API_PATH + "/applicant/get",
-          //   {
-          //         method: "GET",
-          //         headers: {
-          //             "Content-Type": "application/json",
-          //             Authorization: "Bearer " + this.token
-          //         }
-          //     }
-          //   ).then(result =>{
+          this.applicant = await fetch(process.env.VUE_APP_BIT_API_PATH + "/applicant/get",
+            {
+                  method: "GET",
+                  headers: {
+                      "Content-Type": "application/json",
+                      Authorization: "Bearer " + this.token
+                  }
+              }
+            ).then(result =>{
 
-          //       if(!result.ok){
-          //           console.log(result)
-          //           return result
-          //       }
-          //       return result.json()
+                if(!result.ok){
+                    console.log(result)
+                    return result
+                }
+                return result.json()
 
-          //   })
+            })
 
 
-          // if(this.employer){
-          //   this.activeStep = this.$store.getters.getRegistrationStep || this.employer.registrationstep;
-          // }
+          if(this.applicant){
+            this.activeStep = this.$store.getters.getRegistrationStep || this.applicant.registrationstep;
+          }
 
       },
       components:{
@@ -141,16 +119,14 @@
           TheCard,
           ChangePassword,
           PersonalInformation,
-          CompanyDetails, 
-          PaymentMethod,
-          PaymentDetails, 
+          JobPreferences, 
           RegistrationComplete
       }, 
       data(){
           return {
-              steps:["change-password","personal-information","company-details","payment-method","payment-details","registration-complete"],
+              steps:["change-password","personal-information","job-preferences","registration-complete"],
               activeStep:"",
-              employer:{},
+              applicant:{},
               token:"",
               errorMessage:"",
               submissionError:false,

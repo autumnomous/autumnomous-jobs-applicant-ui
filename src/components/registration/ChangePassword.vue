@@ -135,7 +135,7 @@ import { helpers, required, minLength, sameAs, url } from '@vuelidate/validators
                 } else { 
 
                     var token = this.$store.getters.getToken || this.$cookies.get('com.bitjobs');
-                      const result = await fetch(process.env.VUE_APP_BIT_API_PATH + "/employer/update-password",
+                      const result = await fetch(process.env.VUE_APP_BIT_API_PATH + "/applicant/update-password",
                       {
                             method: "POST",
                             headers: {

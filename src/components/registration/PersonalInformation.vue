@@ -5,133 +5,87 @@
         <template v-slot:cardbody>
           <alert-error v-if="submissionError" :message="errorMessage"></alert-error>
 
-                <div class="form-group" >
-                    <label for="firstname" class="input-label">First Name</label>
+                <div class="row mb-4" >
+                    <label for="firstname" class="col-sm-3 col-form-label form-label">First Name</label>
 
-                    <input v-model.lazy="v$.personalInformation.firstname.$model" type="text" class="form-control" name="firstname" id="firstname" aria-label="First Name" :class="{ 'is-invalid': v$.personalInformation.firstname.$error}">
-                    
+                    <div class="col-sm-9">
+                      <input v-model.lazy="v$.personalInformation.firstname.$model" type="text" class="form-control" name="firstname" id="firstname" aria-label="First Name" :class="{ 'is-invalid': v$.personalInformation.firstname.$error}">
+                    </div>
                       <div class="input-errors" v-for="error of v$.personalInformation.firstname.$errors" :key="error.$uid">
                         <div class="error-msg">{{ error.$message }}</div>
                       </div>
                 </div>
 
-                <div class="form-group" >
-                    <label for="lastname" class="input-label">Last Name</label>
+                <div class="row mb-4" >
+                    <label for="lastname" class="col-sm-3 col-form-label form-label">Last Name</label>
 
-                    <input v-model.lazy="v$.personalInformation.lastname.$model" type="text" class="form-control" name="lastname" id="lastname" aria-label="Last Name" :class="{ 'is-invalid': v$.personalInformation.lastname.$error}">
-                    
+                    <div class="col-sm-9">
+                      <input v-model.lazy="v$.personalInformation.lastname.$model" type="text" class="form-control" name="lastname" id="lastname" aria-label="Last Name" :class="{ 'is-invalid': v$.personalInformation.lastname.$error}">
+                    </div>
                       <div class="input-errors" v-for="error of v$.personalInformation.lastname.$errors" :key="error.$uid">
                         <div class="error-msg">{{ error.$message }}</div>
                       </div>
                 </div>
 
-                <div class="form-group" >
-                    <label for="email" class="input-label">Email</label>
+                <div class="row mb-4" >
+                    <label for="email" class="col-sm-3 col-form-label form-label">Email</label>
 
-                    <input v-model.lazy="v$.personalInformation.email.$model" type="text" class="form-control" name="email" id="email" aria-label="Email" :class="{ 'is-invalid': v$.personalInformation.email.$error}">
-                    
+                    <div class="col-sm-9">
+                      <input v-model.lazy="v$.personalInformation.email.$model" type="text" class="form-control" name="email" id="email" aria-label="Email" :class="{ 'is-invalid': v$.personalInformation.email.$error}">
+                    </div>
                       <div class="input-errors" v-for="error of v$.personalInformation.email.$errors" :key="error.$uid">
                         <div class="error-msg">{{ error.$message }}</div>
                       </div>
                 </div>
 
-                <div class="form-group" >
-                    <label for="phonenumber" class="input-label">Phone Number</label>
+                <div class="row mb-4">
+                    <label for="phonenumber" class="col-sm-3 col-form-label form-label">Phone Number</label>
 
-                    <input v-model.lazy="v$.personalInformation.phoneNumber.$model" type="tel" class="form-control" name="phonenumber" id="phonenumber" aria-label="Phone Number" :class="{ 'is-invalid': v$.personalInformation.phoneNumber.$error}">
-                    
+                    <div class="col-sm-9">
+                      <input v-model.lazy="v$.personalInformation.phoneNumber.$model" type="tel" class="form-control" name="phonenumber" id="phonenumber" aria-label="Phone Number" :class="{ 'is-invalid': v$.personalInformation.phoneNumber.$error}">
+                    </div>
                       <div class="input-errors" v-for="error of v$.personalInformation.phoneNumber.$errors" :key="error.$uid">
                         <div class="error-msg">{{ error.$message }}</div>
                       </div>
                 </div>
 
-                <div class="form-group" >
-                    <label for="mobilenumber" class="input-label">Mobile Number</label>
 
-                    <input v-model.lazy="v$.personalInformation.mobileNumber.$model" type="tel" class="form-control" name="mobilenumber" id="mobilenumber" aria-label="Mobile Number" :class="{ 'is-invalid': v$.personalInformation.mobileNumber.$error}">
-                    
-                      <div class="input-errors" v-for="error of v$.personalInformation.mobileNumber.$errors" :key="error.$uid">
-                        <div class="error-msg">{{ error.$message }}</div>
-                      </div>
-                </div>
+              <div class="form-group" >
 
-                 <label for="role" class="input-label">Facebook</label>
-                <div class="input-group mb-3" >
-                    <span class="input-group-text" >https://facebook.com/</span>
-                    <input v-model.lazy="v$.personalInformation.facebook.$model" type="text" class="form-control" name="role" id="role" aria-label="Role" :class="{ 'is-invalid': v$.personalInformation.facebook.$error}">
-                    
-                      <div class="input-errors" v-for="error of v$.personalInformation.facebook.$errors" :key="error.$uid">
-                        <div class="error-msg">{{ error.$message }}</div>
-                      </div>
-                </div>
+                 <!-- Form -->
+                  <div class="row mb-4">
+                    <label for="addressLine1Label" class="col-sm-3 col-form-label form-label">Address</label>
 
-
-
-                <label for="role" class="input-label">Twitter</label>
-                <div class="input-group mb-3" >
-                    
-                    <span class="input-group-text" >https://twitter.com/</span>
-
-                    <input v-model.lazy="v$.personalInformation.twitter.$model" type="text" class="form-control" name="role" id="role" aria-label="Role" :class="{ 'is-invalid': v$.personalInformation.twitter.$error}">
-                    
-                      <div class="input-errors" v-for="error of v$.personalInformation.twitter.$errors" :key="error.$uid">
-                        <div class="error-msg">{{ error.$message }}</div>
-                      </div>
-                </div>
-
-                <label for="role" class="input-label">Instagram</label>
-                <div class="input-group mb-3" >
-
-                    <span class="input-group-text" >https://instagram.com/</span>
-
-                    <input v-model.lazy="v$.personalInformation.instagram.$model" type="text" class="form-control" name="role" id="role" aria-label="Role" :class="{ 'is-invalid': v$.personalInformation.instagram.$error}">
-                    
-                      <div class="input-errors" v-for="error of v$.personalInformation.instagram.$errors" :key="error.$uid">
-                        <div class="error-msg">{{ error.$message }}</div>
-                      </div>
-                </div>
-
-                <div class="form-group" >
-                    <label for="role" class="input-label">Role</label>
-
-                    <div class="">
-
-                         <!-- Select -->
-                        <select v-model="v$.personalInformation.role.$model" class="js-custom-select custom-select dropdown-toggle" size="1" style="opacity: 1;" name="role" :class="{ 'is-invalid': v$.personalInformation.role.$error}">
-                            <option value="" selected>Select One</option>
-                            <option value="administrator">Administrator</option>
-                            <option value="assistant-manager">Assistant Manager</option>
-                            <option value="ceo">CEO</option>
-                            <option value="chief">Chief</option>
-                            <option value="coordinator">Coordinator</option>
-                            <option value="controller">Controller</option>
-                            <option value="director">Director</option>
-                            <option value="executive">Executive</option>
-                            <option value="foreman">Foreman</option>
-                            <option value="founder">Founder</option>
-                            <option value="head">Head</option>
-                            <option value="lead">Lead</option>
-                            <option value="manager">Manager</option>
-                            <option value="managing-member">Managing Member</option>
-                            <option value="managing-partner">Managing Partner</option>
-                            <option value="officer">Officer</option>
-                            <option value="organizer">Organizer</option>
-                            <option value="owner">Owner</option>
-                            <option value="president">President</option>
-                            <option value="principal">Principal</option>
-                            <option value="proprietor">Proprietor</option>
-                            <option value="supervisor">Supervisor</option>
-                            <option value="superintendent">Superintendent</option>
-                            <option value="team-leader">Team Leader</option>
-                        </select>
-                        <!-- End Select -->
-
-                      <div class="input-errors" v-for="error of v$.personalInformation.role.$errors" :key="error.$uid">
-                        <div class="error-msg">{{ error.$message }}</div>
-                      </div>
+                    <div class="col-sm-9">
+                      <input v-model.lazy="v$.personalInformation.address.$model" type="text" class="form-control" name="addressLine1" id="addressLine1Label" placeholder="Your address" aria-label="Your address">
                     </div>
-            </div>
+                  </div>
+                  <!-- End Form -->
 
+                     <!-- Form -->
+                  <div class="row mb-4">
+                    <label for="locationLabel" class="col-sm-3 col-form-label form-label">Location</label>
+
+                    <div class="col-sm-9">
+
+                      <div class="mb-3">
+                        <input v-model.lazy="v$.personalInformation.city.$model" type="text" class="form-control" name="city" id="cityLabel" placeholder="City" aria-label="City">
+                      </div>
+                      <input v-model.lazy="v$.personalInformation.state.$model" type="text" class="form-control" name="state" id="stateLabel" placeholder="State" aria-label="State">
+                    </div>
+                  </div>
+                  <!-- End Form -->
+
+                  <!-- Form -->
+                  <div class="row mb-4">
+                    <label for="zipCodeLabel" class="col-sm-3 col-form-label form-label">Zip code <i class="bi-question-circle text-body ms-1"></i></label>
+
+                    <div class="col-sm-9">
+                      <input v-model.lazy="v$.personalInformation.zipcode.$model" type="text" class="js-input-mask form-control" name="zipCode" id="zipCodeLabel" placeholder="Your zip code" aria-label="Your zip code">
+                    </div>
+                  </div>
+                  <!-- End Form -->
+                </div>
 
         </template>
 
@@ -156,7 +110,7 @@ import { required, helpers} from '@vuelidate/validators'
 
     export default {
       props:{
-        employer:Object
+        applicant:Object
       },
        setup(){
             return {
@@ -170,18 +124,20 @@ import { required, helpers} from '@vuelidate/validators'
         data(){
           return {
              personalInformation:{
-                    firstname:this.employer.firstname,
-                    lastname:this.employer.lastname,
-                    email:this.employer.email,
-                    phoneNumber:"",
-                    mobileNumber:"",
-                    role:"",
-                    facebook:"",
-                    twitter:"",
-                    instagram:""
-                },
-                errorMessage:"",
-                submissionError:false
+                firstname:this.applicant.firstname,
+                lastname:this.applicant.lastname,
+                email:this.applicant.email,
+                phoneNumber:this.applicant.phonenumber,
+                address:this.applicant.address,
+                city:this.applicant.city,
+                state:this.applicant.state,
+                zipcode:this.applicant.zipcode,
+                // facebook:"",
+                // twitter:"",
+                // instagram:""
+            },
+            errorMessage:"",
+            submissionError:false
 
           }
         },
@@ -200,11 +156,17 @@ import { required, helpers} from '@vuelidate/validators'
                     phoneNumber:{
                       required: helpers.withMessage('This field cannot be empty', required)
                     },
-                    mobileNumber:{
+                    address:{
                       required: helpers.withMessage('This field cannot be empty', required)
                     },
-                    role:{
-                      required: helpers.withMessage('This field cannot be empty', required),
+                    city:{
+                      required: helpers.withMessage('This field cannot be empty', required)
+                    },
+                    state:{
+                      required: helpers.withMessage('This field cannot be empty', required)
+                    },
+                    zipcode:{
+                      required: helpers.withMessage('This field cannot be empty', required)
                     },
                     facebook:{},
                     twitter:{},
@@ -222,7 +184,7 @@ import { required, helpers} from '@vuelidate/validators'
                     this.submissionError = false;
                     var token = this.$store.getters.getToken || this.$cookies.get('com.bitjobs');
                     
-                      const result = await fetch(process.env.VUE_APP_BIT_API_PATH + "/employer/update-account",
+                      const result = await fetch(process.env.VUE_APP_BIT_API_PATH + "/applicant/update-account",
                       {
                             method: "POST",
                             headers: {
@@ -234,12 +196,14 @@ import { required, helpers} from '@vuelidate/validators'
                                 firstname:this.v$.personalInformation.firstname.$model,
                                 lastname:this.v$.personalInformation.lastname.$model,
                                 email:this.v$.personalInformation.email.$model, 
-                                phonenumber:this.v$.personalInformation.phoneNumber.$model, 
-                                mobilenumber:this.v$.personalInformation.mobileNumber.$model, 
-                                role:this.v$.personalInformation.role.$model,
-                                facebook:  this.v$.personalInformation.facebook.$model,
-                                twitter: this.v$.personalInformation.twitter.$model,
-                                instagram: this.v$.personalInformation.instagram.$model
+                                phonenumber:this.v$.personalInformation.phoneNumber.$model,
+                                address: this.v$.personalInformation.address.$model,
+                                city: this.v$.personalInformation.city.$model,
+                                state: this.v$.personalInformation.state.$model,
+                                zipcode: this.v$.personalInformation.zipcode.$model,
+                                // facebook:  this.v$.personalInformation.facebook.$model,
+                                // twitter: this.v$.personalInformation.twitter.$model,
+                                // instagram: this.v$.personalInformation.instagram.$model
                             })
                         }
                     )
@@ -247,7 +211,7 @@ import { required, helpers} from '@vuelidate/validators'
                     if(result.ok){
                         this.submissionError = false;
                         
-                        this.$emit("next-step","company-details")
+                        this.$emit("next-step","job-preferences")
                     } else { 
                         console.log("error")
                     }
