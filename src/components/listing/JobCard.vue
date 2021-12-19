@@ -36,17 +36,17 @@
                     <!-- End Col -->
 
                     <div class="col-auto order-md-3">
-                        <!-- Checkbbox Bookmark -->
+                         <!-- Checkbbox Bookmark -->
                         <div class="form-check form-check-bookmark">
-                        <input class="form-check-input" type="checkbox" value="" id="jobsCardBookmarkCheck1">
-                        <label class="form-check-label" for="jobsCardBookmarkCheck1">
+                          <input class="form-check-input" type="checkbox" value="" id="jobsCardBookmarkCheck2">
+                          <label class="form-check-label" for="jobsCardBookmarkCheck2">
                             <span class="form-check-bookmark-default" data-bs-toggle="tooltip" data-bs-placement="top" title="Save this job">
-                            <i class="bi-star"></i>
+                              <i class="bi-star"></i>
                             </span>
                             <span class="form-check-bookmark-active" data-bs-toggle="tooltip" data-bs-placement="top" title="Saved">
-                            <i class="bi-star-fill"></i>
+                              <i class="bi-star-fill"></i>
                             </span>
-                        </label>
+                          </label>
                         </div>
                         <!-- End Checkbbox Bookmark -->
                     </div>
@@ -66,8 +66,8 @@
                    
                     <!-- End Row -->
                 </div>
-                 <div class="mt-10">
-                         <button>Apply Now</button>
+                 <div class="position-absolute bottom-0 end-0 mr-3 mb-7">
+                         <button class="btn btn-primary" >Apply Now</button>
                     </div>
                 </div>
                 <!-- End Media -->
@@ -95,8 +95,4 @@
 </script>
 
 <style scoped>
-
-    apply-now {
-        padding-left:30px;
-    }
 </style>
