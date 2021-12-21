@@ -53,7 +53,7 @@
                     <!-- End Col -->
 
                     <div class="col-12 col-md mt-3 mt-md-0">
-                        <span class="d-block small text-body mb-1">$125k-$135k yearly</span>
+                        <span class="d-block small text-body mb-1">${{job.minsalary}}-${{job.maxsalary}} per {{job.payperiod}}</span>
 
                         <span class="badge bg-soft-info text-info me-2">
                         <span class="legend-indicator bg-info" v-if="job.remote"></span>Remote
