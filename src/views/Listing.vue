@@ -77,21 +77,6 @@
                         </div>
 
                         <div class="mb-5">
-                            <h5 class="mb-3">Last updated</h5>
-
-                            <!-- Select -->
-                            <select class="form-select form-select-sm">
-                            <option value="within last day">within last day</option>
-                            <option value="within last week">within last week</option>
-                            <option value="within last month">within last month</option>
-                            <option value="within last 3 months">within last 3 months</option>
-                            <option value="within last 6 months">within last 6 months</option>
-                            <option value="show all resumes">show all resumes</option>
-                            </select>
-                            <!-- End Select -->
-                        </div>
-
-                        <div class="mb-5">
                             <h5 class="mb-3">Company</h5>
 
                             <div class="d-grid gap-2">
