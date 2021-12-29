@@ -7,7 +7,7 @@
                     <!-- Input Card -->
                     <div class="input-card input-card-sm mb-3">
                         <div class="input-card-form">
-                            <label for="jobTitleForm" class="form-label visually-hidden">Job, title, skills, or company</label>
+                            <label for="jobTitleForm" class="form-label visually-hidden">title</label>
                             <div class="input-group input-group-merge">
                                 <span class="input-group-prepend input-group-text">
                                 <i class="bi-search"></i>
@@ -17,7 +17,7 @@
                             </div>
 
                             <div class="input-card-form">
-                            <label for="cityForm" class="form-label visually-hidden">City, state, or zip</label>
+                            <label for="cityForm" class="form-label visually-hidden">zip</label>
                             <div class="input-group input-group-merge">
                                 <span class="input-group-prepend input-group-text">
                                 <i class="bi-geo-alt"></i>
