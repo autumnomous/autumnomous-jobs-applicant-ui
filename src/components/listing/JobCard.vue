@@ -75,8 +75,8 @@
 
             <div class="card-footer pt-0">
                 <ul class="list-inline list-separator small text-body">
-                <li class="list-inline-item">Posted 7 hours ago</li>
-                <li class="list-inline-item">Full time</li>
+                <li class="list-inline-item">Posted on {{prettyDate(job.visibledate)}}</li>
+                <li class="list-inline-item">{{job.jobtype}}</li>
                 </ul>
             </div>
         </div>
@@ -87,6 +87,21 @@
     export default {
         props:{
             job: Object,
+        },
+        methods:{
+
+            prettyDate(dateStr){
+
+                if(dateStr != ""){
+                    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone:"UTC" };
+                    const date = new Date(dateStr);
+                    return date.toLocaleDateString("en-US", options)
+                } else { 
+                    return ""
+                }
+                
+            }
+
         },
         computed:{
         
