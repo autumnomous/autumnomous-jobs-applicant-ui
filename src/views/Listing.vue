@@ -105,10 +105,6 @@
                             </div>
                         </div>
 
-
-                        <div class="d-grid">
-                            <button type="button" class="btn btn-white btn-transition">Clear all</button>
-                        </div>
                         </form>
                         <!-- End Form -->
                     </div>
@@ -123,28 +119,6 @@
                 <div class="row align-items-center mb-5">
                     <div class="col-sm mb-3 mb-sm-0">
                     <h3 class="mb-0">{{filteredJobs.length}} jobs</h3>
-                    </div>
-
-                    <div class="col-sm-auto">
-                    <div class="d-sm-flex justify-content-sm-end align-items-center">
-                        <!-- Select -->
-                        <div class="mb-2 mb-sm-0 me-sm-2">
-                        <select class="form-select form-select-sm">
-                            <option value="Relevance">Relevance</option>
-                            <option value="mostRecent">Most recent</option>
-                        </select>
-                        </div>
-                        <!-- End Select -->
-
-                        <!-- Select -->
-                        <div class="mb-2 mb-sm-0 me-sm-2">
-                        <select class="form-select form-select-sm">
-                            <option value="alphabeticalOrderSelect1">A-to-Z</option>
-                            <option value="alphabeticalOrderSelect2">Z-to-A</option>
-                        </select>
-                        </div>
-                        <!-- End Select -->
-                    </div>
                     </div>
                 </div>
                 <!-- End Row -->
