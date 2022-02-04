@@ -68,7 +68,7 @@
               <div class="row align-items-center mb-5">
                 <div class="col-sm-6 mb-3 mb-sm-0">
                   <span class="font-size-1 text-muted">Already have an account?</span>
-                  <router-link class="font-size-1 font-weight-bold" to="/employer/login">Login</router-link>
+                  <router-link class="font-size-1 font-weight-bold" to="/applicant/login">Login</router-link>
                 </div>
 
                 <div class="col-sm-6 text-sm-right">

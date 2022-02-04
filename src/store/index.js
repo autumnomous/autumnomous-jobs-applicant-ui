@@ -33,7 +33,7 @@ const store = createStore({
 
             // const { $cookies } = store.app.config.globalProperties 
 
-            Cookies.set('com.bitjobs', data.token, {expires: 7, secure:true, sameSite:"none"})
+            Cookies.set('com.ajobs.applicant', data.token, {expires: 7, secure:true, sameSite:"none"})
             
         } else { 
             const error = new Error(
@@ -51,7 +51,7 @@ const store = createStore({
     mutations:{
         setToken(state, payload){
             state.token = payload.token;
-            // this.$cookies.set('com.bitjobs', payload.token);
+            // this.$cookies.set('com.ajobs.applicant', payload.token);
         },
         clearToken(state){
 

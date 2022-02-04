@@ -75,7 +75,7 @@ export default {
     },
     computed:{
         loggedIn(){
-            return this.$cookies.get('com.bitjobs');
+            return this.$cookies.get('com.ajobs.applicant');
         }
     }
 

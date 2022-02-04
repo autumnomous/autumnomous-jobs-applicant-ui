@@ -25,7 +25,7 @@ export default {
 
     methods:{
         async getJob(){
-            let token = this.$cookies.get('com.bitjobs');
+            let token = this.$cookies.get('com.ajobs.applicant');
             this.job = await fetch(process.env.VUE_APP_BIT_API_PATH + "/applicant/get/job",
             {
                 method: "POST",
@@ -74,7 +74,7 @@ export default {
             return date.toISOString().split('T')[0]
         },
         async formSubmit(e){
-            let token = this.$cookies.get('com.bitjobs');
+            let token = this.$cookies.get('com.ajobs.applicant');
 
             if(!this.v$.$invalid){
                 let job = await fetch(process.env.VUE_APP_BIT_API_PATH + "/employer/edit/job",

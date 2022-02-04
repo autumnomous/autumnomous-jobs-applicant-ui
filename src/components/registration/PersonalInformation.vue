@@ -182,7 +182,7 @@ import { required, helpers} from '@vuelidate/validators'
                     this.submissionError = true;
                 } else { 
                     this.submissionError = false;
-                    var token = this.$store.getters.getToken || this.$cookies.get('com.bitjobs');
+                    var token = this.$store.getters.getToken || this.$cookies.get('com.ajobs.applicant');
                     
                       const result = await fetch(process.env.VUE_APP_BIT_API_PATH + "/applicant/update-account",
                       {

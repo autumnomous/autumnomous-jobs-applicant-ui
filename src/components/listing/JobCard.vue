@@ -22,7 +22,7 @@
                     <div class="col col-md-8">
                         <h3 class="card-title">
                             
-                        <router-link class="text-dark" :to="'/job-list/' + job.publicid"  >{{ job.title }}</router-link>
+                        <router-link class="text-dark" :to="'/job-list/' + job.publicid">{{ job.title }}</router-link>
                         </h3>
                         <div class="d-none d-sm-inline-block">
                             <h6 class="card-title">
@@ -40,10 +40,10 @@
                         <div class="form-check form-check-bookmark">
                           <input class="form-check-input" type="checkbox" value="" id="jobsCardBookmarkCheck2">
                           <label class="form-check-label" for="jobsCardBookmarkCheck2">
-                            <span class="form-check-bookmark-default" data-bs-toggle="tooltip" data-bs-placement="top" title="Save this job">
+                            <span class="form-check-bookmark-default"  v-tooltip:top="'Save this job'">
                               <i class="bi-star"></i>
                             </span>
-                            <span class="form-check-bookmark-active" data-bs-toggle="tooltip" data-bs-placement="top" title="Saved">
+                            <span class="form-check-bookmark-active" v-tooltip:top="'Saved'">
                               <i class="bi-star-fill"></i>
                             </span>
                           </label>
@@ -84,6 +84,7 @@
 </template>
 
 <script>
+    
     export default {
         props:{
             job: Object,
@@ -102,6 +103,18 @@
                 
             }
 
+        },
+        directives:{
+            tooltip: {
+                bind:function(el, binding){
+                    $(el).tooltip({
+                        title: binding.value,
+                        placement: binding.arg,
+                        trigger: 'hover'             
+                    })
+            }
+                
+            }
         },
         computed:{
         

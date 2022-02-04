@@ -22,7 +22,7 @@
                                 <span class="input-group-prepend input-group-text">
                                 <i class="bi-geo-alt"></i>
                                 </span>
-                                <input v-model.lazy="areaSearch" type="text" class="form-control" id="cityForm" placeholder="City, state, or zip" aria-label="City, state, or zip">
+                                <input v-model="areaSearch" type="text" class="form-control" id="cityForm" placeholder="Zip" aria-label="Zip">
                             </div>
                         </div>
                         <!-- <button type="button" class="btn btn-primary">Search</button> -->
@@ -150,7 +150,7 @@
 
         async created() {
             this.$emit('update:layout', LayoutDefault);
-            this.token = Cookies.get('com.bitjobs')
+            this.token = Cookies.get('com.ajobs.applicant')
 
             var result = await fetch(process.env.VUE_APP_BIT_API_PATH + "/applicant/get/jobs",
             {
@@ -168,14 +168,13 @@
     
             if(result.ok){
                 this.jobs = await result.json()
-                console.log(this.jobs)
                 this.filteredJobs = this.jobs
 
                 this.dataReady = true
             } else { 
-                if(result.status == 401){
-                    this.$router.replace("/applicant/login")
-                }
+                // if(result.status == 401){
+                //     this.$router.replace("/applicant/login")
+                // }
 
                 if(result.status == 400){
                     this.$router.replace("/error/400")
