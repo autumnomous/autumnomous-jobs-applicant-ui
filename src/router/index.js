@@ -34,7 +34,7 @@ const routes = [
     name: 'Applicant Login',
     component: Login,
     beforeEnter:(to, from, next)=>{
-      const token = Cookies.get('com.bitjobs')
+      const token = Cookies.get('com.ajobs.applicant')
 
       if(token){
         next('/applicant/dashboard')
@@ -86,7 +86,7 @@ const router = createRouter({
 
 // router.beforeEach( async (to,from, next) =>{
 //   const { $cookies } = router.app.config.globalProperties;
-//   const token = $cookies.get('com.bitjobs');
+//   const token = $cookies.get('com.ajobs.applicant');
 
 //   if(to.fullPath.includes("employer")){
 //     var employer = await fetch(process.env.VUE_APP_BIT_API_PATH + "/employer/get",

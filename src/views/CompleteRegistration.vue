@@ -81,13 +81,14 @@
   import PersonalInformation from '../components/registration/PersonalInformation.vue'
   import JobPreferences from '../components/registration/JobPreferences.vue'
   import RegistrationComplete from '../components/registration/RegistrationComplete.vue'
+  import Cookies from 'js-cookie'
 
   export default {
       async created() {
           this.$emit('update:layout', RegistrationLayout);
 
           
-          this.token = this.$cookies.get('com.bitjobs');
+          this.token = Cookies.get('com.ajobs.applicant');
           
           this.applicant = await fetch(process.env.VUE_APP_BIT_API_PATH + "/applicant/get",
             {

@@ -9,11 +9,11 @@
         </div>
 
         <div class="d-flex justify-content-center">
-            <router-link class="btn btn-white mr-3" to="/employer/account">
+            <router-link class="btn btn-white mr-3" to="/applicant/account">
                 Go to account<i class="fas fa-angle-right mr-1 ml-2"></i>
             </router-link>
             
-            <router-link class="btn btn-primary" to="/employer/dashboard">
+            <router-link class="btn btn-primary" to="/applicant/dashboard">
                 <i class="fas fa-briefcase mr-1"></i> Go to dashboard
             </router-link>
         </div>
