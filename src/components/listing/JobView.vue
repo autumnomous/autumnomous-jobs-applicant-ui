@@ -23,15 +23,14 @@
                 <div class="col-auto">
                   <!-- Checkbbox Bookmark -->
                   <div class="form-check form-check-bookmark">
-                    <input v-model="bookmarked" @click="bookmarkJob" class="form-check-input" type="checkbox" value="" id="jobsPageHeaderBookmarkCheck">
-                    <label class="form-check-label" for="jobsPageHeaderBookmarkCheck">
+                    <button @click="bookmarkJob" class="btn btn-sm btn-secondary">
                       <span v-if="!bookmarked" class="form-check-bookmark-default">
                         <i class="bi-star me-1"></i> Save this job
                       </span>
                       <span  v-else class="form-check-bookmark-active">
                         <i class="bi-star-fill me-1"></i> Saved
                       </span>
-                    </label>
+                    </button>
                   </div>
                   <!-- End Checkbbox Bookmark -->
                 </div>
