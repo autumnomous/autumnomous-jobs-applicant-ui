@@ -150,7 +150,7 @@
 
         async created() {
             this.$emit('update:layout', LayoutDefault);
-            this.token = Cookies.get('com.ajobs.applicant')
+            this.token = Cookies.get('com.ajobs.applicant') 
 
             var result = await fetch(process.env.VUE_APP_BIT_API_PATH + "/applicant/get/jobs",
             {

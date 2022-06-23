@@ -70,11 +70,8 @@
           <div class="col-auto">
             <!-- Dropdown -->
             <div class="dropdown">
-              <a class="link" href="#" id="jobOverviewShareDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-dropdown-animation>
-                Share this job <i class="bi-share-fill small ms-1"></i>
-              </a>
 
-              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="jobOverviewShareDropdown">
+              <div>
                 <a class="dropdown-item" href="#">
                   <i class="bi-facebook dropdown-item-icon"></i> Facebook
                 </a>
@@ -92,10 +89,10 @@
         </div>
         <!-- End Row -->
 
-            <span v-html="job.description"></span>
+        <span v-html="job.description"></span>
 
         <div class="d-grid mt-7">
-          <a class="btn btn-primary btn-transition" href="@@autopath/demo-jobs/apply-for-job.html">Apply for this job</a>
+          <a class="btn btn-primary btn-transition" href="#">Apply for this job</a>
         </div>
       </div>
     </div>
