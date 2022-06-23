@@ -38,15 +38,14 @@
                     <div class="col-auto order-md-3">
                          <!-- Checkbbox Bookmark -->
                         <div class="form-check form-check-bookmark">
-                          <input class="form-check-input" type="checkbox" value="" id="jobsCardBookmarkCheck2">
-                          <label class="form-check-label" for="jobsCardBookmarkCheck2">
-                            <span class="form-check-bookmark-default"  v-tooltip:top="'Save this job'">
-                              <i class="bi-star"></i>
-                            </span>
-                            <span class="form-check-bookmark-active" v-tooltip:top="'Saved'">
-                              <i class="bi-star-fill"></i>
-                            </span>
-                          </label>
+                            <button @click="bookmarkJob" class="btn btn-sm">
+                                <span v-if="!bookmarked" class="form-check-bookmark-default">
+                                    <i class="bi-star me-1"></i>
+                                </span>
+                                <span  v-else class="form-check-bookmark-active">
+                                    <i class="bi-star-fill me-1"></i>
+                                </span>
+                            </button>
                         </div>
                         <!-- End Checkbbox Bookmark -->
                     </div>
@@ -67,7 +66,7 @@
                     <!-- End Row -->
                 </div>
                  <div class="position-absolute bottom-0 end-0 mr-3 mb-7">
-                         <button class="btn btn-primary" >Apply Now</button>
+                         <button class="btn btn-outline-primary" >Apply Now</button>
                     </div>
                 </div>
                 <!-- End Media -->
@@ -84,10 +83,19 @@
 </template>
 
 <script>
-    
+    import Cookies from 'js-cookie'
+
     export default {
         props:{
-            job: Object,
+            job: {
+                type: Object
+            },
+        },
+
+        data(){
+            return {
+                bookmarked: false,
+            }
         },
         methods:{
 
@@ -101,6 +109,84 @@
                     return ""
                 }
                 
+            },
+            async bookmarkJob(){
+                    this.bookmarked = !this.bookmarked;
+
+                    var token = Cookies.get("com.ajobs.applicant")
+
+                    if(this.bookmarked){
+                        var result = await fetch(process.env.VUE_APP_BIT_API_PATH + "/applicant/bookmark",
+                        {
+                            method: "POST",
+                            headers: { 
+                            "Content-Type":"application/json",
+                            "Authorization": "Bearer " + token
+                            },
+                            body: JSON.stringify({
+                            jobid:this.job.publicid
+                            })
+
+                        }).then(result =>{
+
+                                if(!result.ok){
+                                console.log(result)
+                                }
+
+                                return result
+                            })
+
+
+                } else { 
+                    var result = await fetch(process.env.VUE_APP_BIT_API_PATH + "/applicant/bookmark",
+                    {
+                        method: "DELETE",
+                        headers: { 
+                        "Content-Type":"application/json",
+                        "Authorization": "Bearer " + token
+                        },
+                        body: JSON.stringify({
+                        jobid:this.job.publicid
+                        })
+
+                    }).then(result =>{
+
+                            if(!result.ok){
+                            console.log(result)
+                            }
+
+                            return result
+                        })
+            }
+            this.$emit("bookmark")
+            
+            },
+
+            async getBookmark(){
+
+                var token = Cookies.get("com.ajobs.applicant")
+                var result = await fetch(process.env.VUE_APP_BIT_API_PATH + "/applicant/get/bookmark",
+                    {
+                        method: "POST",
+                        headers: { 
+                        "Content-Type":"application/json",
+                        "Authorization": "Bearer " + token
+                        },
+                        body: JSON.stringify({
+                            jobid:this.job.publicid
+                        })
+
+                    }).then(result =>{
+
+                            if(!result.ok){
+                                console.log(result)
+                            }
+
+                            return result.json()
+                        })
+
+                this.bookmarked = !!result|| false
+
             }
 
         },
@@ -118,6 +204,9 @@
         },
         computed:{
         
+        },
+        created(){
+            this.getBookmark()
         }
     }
 </script>
