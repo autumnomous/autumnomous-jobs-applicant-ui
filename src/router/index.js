@@ -8,6 +8,8 @@ import Dashboard from "../views/Dashboard.vue"
 import Listing from '../views/Listing.vue'
 import JobView from '../components/listing/JobView.vue'
 import Error400 from '../views/errors/Error400.vue'
+import Account from '../views/Account.vue'
+import Profile from '../views/Profile.vue'
 
 const routes = [
   {
@@ -57,16 +59,16 @@ const routes = [
     name:'job',
     component: JobView
   },
-  // {
-  //   path: '/applicant/profile',
-  //   name: 'Applicant Profile',
-  //   component: Dashboard
-  // },
-  // {
-  //   path: '/applicant/account',
-  //   name: 'Applicant Account',
-  //   component: Dashboard
-  // },
+  {
+    path: '/applicant/profile',
+    name: 'Applicant Profile',
+    component: Profile
+  },
+  {
+    path: '/applicant/account',
+    name: 'Applicant Account',
+    component: Account
+  },
   {
     path: '/error/400',
     name: 'Error 400',
