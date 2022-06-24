@@ -682,14 +682,10 @@
 
 <script>
 // @ is an alias to /src
-import LayoutDefault from '../layouts/DefaultLayout.vue'
 export default {
   name: "Home",
   components: {
     
-  },
-   created() {
-    this.$emit('update:layout', LayoutDefault);
   },
 };
 </script>

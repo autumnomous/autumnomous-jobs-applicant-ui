@@ -74,7 +74,6 @@
 <script>
   import CoverRow from '../components/ui/auth/CoverRow.vue'
   import AlertError from '../components/ui/AlertError.vue'
-  import RegistrationLayout from '../layouts/RegistrationLayout.vue'
   import TheCard from '../components/ui/TheCard.vue'
 
   import ChangePassword from '../components/registration/ChangePassword.vue'
@@ -85,7 +84,7 @@
 
   export default {
       async created() {
-          this.$emit('update:layout', RegistrationLayout);
+  
 
           
           this.token = Cookies.get('com.ajobs.applicant');
