@@ -92,7 +92,7 @@
         <span v-html="job.description"></span>
 
         <div class="d-grid mt-7">
-          <a class="btn btn-primary btn-transition" href="#">Apply for this job</a>
+          <button class="btn btn-primary btn-transition" >Apply for this job</button>
         </div>
       </div>
     </div>
@@ -103,9 +103,8 @@
 
 <script>
 import AlertError from '../../components/ui/AlertError.vue'
-import DefaultLayout from '../../layouts/DefaultLayout.vue'
 import Cookies from 'js-cookie'
-import {add, formatDistanceToNow} from 'date-fns'
+import {formatDistanceToNow} from 'date-fns'
 
 export default {
     components:{
@@ -250,7 +249,6 @@ export default {
     },
 
     created(){
-        this.$emit('update:layout', DefaultLayout);
         this.getJob()
         this.getBookmark()
     }
