@@ -22,10 +22,6 @@
 
 <script setup>
     import JobCardList from '../components/dashboard/JobCardList.vue'
-
-    // if(jobs){
-    //     dataReady.value = true;
-    // }
          
 
 </script>
