@@ -66,6 +66,9 @@ const store = createStore({
         },
         getRegistrationStep(state){
             return state.registrationStep;
+        },
+        isAuthenticated(state){
+            return !!state.token;
         }
     }
 })
