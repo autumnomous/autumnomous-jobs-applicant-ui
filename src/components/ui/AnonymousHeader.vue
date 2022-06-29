@@ -15,9 +15,9 @@
     </li>
     <!-- End Pages -->
 
-    <li class="navbar-nav-item">
-        <router-link class="nav-link" to="/applicant/login">Post a job</router-link>
-    </li>
+    <button class="navbar-nav-item btn btn-sm btn-primary transition-3d-hover" @click="$router.replace({name:'Applicant Login'})">
+        Upload resume
+    </button>
 
     <!-- Button -->
     <li class="navbar-nav-last-item">
@@ -57,4 +57,6 @@ export default {
     #jobsSubMenuPages {
         left:70%;
     }
+
+   
 </style>

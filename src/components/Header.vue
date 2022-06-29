@@ -33,12 +33,11 @@
                                 <router-link class="nav-link" to="/">Home</router-link>
                             </li>
 
-                                <!-- <AnonymousHeader></AnonymousHeader>  -->
-                                <!-- <AnonymousHeader v-if="!loggedIn"></AnonymousHeader> -->
+                                <AnonymousHeader v-if="!isLoggedIn"/>
                                 <!-- <EmployerHeader v-if="loggedIn"></EmployerHeader> -->
                                 <!-- <EmployerHeader></EmployerHeader> -->
-                                <applicant-header></applicant-header>
-                                <!-- <ApplicantHeader></ApplicantHeader> -->
+                                
+                                <ApplicantHeader v-if="isLoggedIn"/>
                         </ul>
                     </div>
                     <!-- End Navigation -->
@@ -74,8 +73,8 @@ export default {
         }
     },
     computed:{
-        loggedIn(){
-            return this.$cookies.get('com.ajobs.applicant');
+        isLoggedIn(){
+            return this.$store.getters.isAuthenticated;
         }
     }
 
