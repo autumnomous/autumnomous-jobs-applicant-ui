@@ -5,10 +5,13 @@
 </template>
 
 
-<script setup>
+<script setup lang="ts">
   import Footer from './components/Footer.vue';
   import Header from './components/Header.vue';
   import AuthHeader from './components/ui/auth/AuthHeader.vue';
+  import {useAuthStore} from './stores/auth';
+
+  const store = useAuthStore();
 
 </script>
 <style>
