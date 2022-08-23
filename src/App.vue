@@ -1,26 +1,17 @@
 <template>
- <component :is="layout">
-   <router-view v-model:layout='layout'/>
- </component>
-  
-
+  <component :is="($route.fullPath.includes('login') || $route.fullPath.includes('signup')) ? AuthHeader: Header"></component>
+  <router-view :key="$route.fullPath"/>
+  <component :is="($route.fullPath.includes('login') || $route.fullPath.includes('signup')) ? null : Footer"></component>
 </template>
 
 
-<script>
+<script setup lang="ts">
+  import Footer from './components/Footer.vue';
+  import Header from './components/Header.vue';
+  import AuthHeader from './components/ui/auth/AuthHeader.vue';
+  import {useAuthStore} from './stores/auth';
 
-import Footer from './components/Footer.vue'
-import Header from './components/Header.vue'
-import $ from 'jquery'
-
-export default {
-
-    data(){
-      return {
-        layout:'div',
-      }
-    }
-}
+  const store = useAuthStore();
 
 </script>
 <style>

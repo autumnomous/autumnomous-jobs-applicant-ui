@@ -1,54 +1,26 @@
 <template>
-    <div>
+  <div>
+    <h3>Active Applications</h3>
+  </div>
 
-    </div>
+  <div>
+    <h3>Bookmarked Jobs</h3>
+
+    <Suspense>
+      <JobCardList />
+    </Suspense>
+  </div>
+
+  <div>
+    <h3>Resumes</h3>
+  </div>
 </template>
 
-<script>
-    import DefaultLayout from '../layouts/DefaultLayout.vue'
-    import Cookies from 'js-cookie'
+<script setup>
+import { useAuthStore } from "../stores/auth";
+import JobCardList from "../components/dashboard/JobCardList.vue";
 
-    export default {
-        
-        async created(){
-            this.$emit('update:layout', DefaultLayout);
-            this.token = Cookies.get('com.bitjobs')
-
-            this.jobs = await fetch(process.env.VUE_APP_BIT_API_PATH + "/applicant/get/jobs",
-            {
-                  method: "GET",
-                  headers: {
-                      "Content-Type": "application/json",
-                      Authorization: "Bearer " + this.token
-                  }
-              }
-            ).then(result =>{
-
-                if(!result.ok){
-                    console.log(result)
-                    return result
-                }
-                return result.json()
-
-            })
-
-            if(this.jobs){
-                this.dataReady = true
-            }
-
-
-        },
-
-        data(){
-            return { 
-                jobs:[],
-                dataReady: false
-
-            }
-        }
-    }
+const store = useAuthStore();
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

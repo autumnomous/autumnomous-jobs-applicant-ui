@@ -1,133 +1,265 @@
 <template>
+  <main id="content" role="main">
+    <!-- Page Header -->
+    <div class="container content-space-t-2">
+      <div class="w-lg-75 mx-lg-auto">
+        <div class="page-header">
+          <!-- Media -->
+          <div class="d-sm-flex mb-3">
+            <div class="flex-shrink-0 mb-2 mb-sm-0">
+              <a href="">
+                <img
+                  class="avatar avatar-lg mb-3"
+                  :src="job.companylogo"
+                  :alt="job.companyname + ' Logo'"
+                />
+              </a>
+            </div>
 
-    <main id="content" role="main">
-        
-    </main>
-    
+            <div class="flex-grow-1 ms-sm-4">
+              <div class="row">
+                <div class="col">
+                  <h1 class="page-header-title h2">{{ job.title }}</h1>
+                </div>
+                <!-- End Col -->
+
+                <div class="col-auto">
+                  <!-- Checkbbox Bookmark -->
+                  <div class="form-check form-check-bookmark">
+                    <button
+                      @click="bookmarkJob"
+                      class="btn btn-sm btn-secondary"
+                    >
+                      <span
+                        v-if="!bookmarked"
+                        class="form-check-bookmark-default"
+                      >
+                        <i class="bi-star me-1"></i> Save this job
+                      </span>
+                      <span v-else class="form-check-bookmark-active">
+                        <i class="bi-star-fill me-1"></i> Saved
+                      </span>
+                    </button>
+                  </div>
+                  <!-- End Checkbbox Bookmark -->
+                </div>
+                <!-- End Col -->
+              </div>
+              <!-- End Row -->
+
+              <ul
+                class="list-inline list-separator d-flex align-items-center mb-2"
+              >
+                <li class="list-inline-item">
+                  <a class="link" :href="job.companyurl">{{
+                    job.companyname
+                  }}</a>
+                </li>
+              </ul>
+
+              <ul class="list-inline list-separator small text-body mb-2">
+                <li class="list-inline-item">{{ timeSincePosted }}</li>
+                <li class="list-inline-item">{{ job.companylocation }}</li>
+                <li class="list-inline-item">{{ jobType }}</li>
+              </ul>
+            </div>
+          </div>
+          <!-- End Media -->
+        </div>
+      </div>
+    </div>
+    <!-- End Page Header -->
+
+    <!-- Content -->
+    <div class="container content-space-2 content-space-b-lg-3">
+      <div class="w-lg-75 mx-lg-auto">
+        <div class="row mb-3">
+          <div class="col">
+            <h3>Description</h3>
+          </div>
+          <!-- End Col -->
+
+          <div class="col-auto">
+            <!-- Dropdown -->
+            <div class="dropdown">
+              <div>
+                <a class="dropdown-item" href="#">
+                  <i class="bi-facebook dropdown-item-icon"></i> Facebook
+                </a>
+                <a class="dropdown-item" href="#">
+                  <i class="bi-twitter dropdown-item-icon"></i> Twitter
+                </a>
+                <a class="dropdown-item" href="#">
+                  <i class="bi-linkedin dropdown-item-icon"></i> LinkedIn
+                </a>
+              </div>
+            </div>
+            <!-- End Dropdown -->
+          </div>
+          <!-- End Col -->
+        </div>
+        <!-- End Row -->
+
+        <span v-html="job.description"></span>
+
+        <div class="d-grid mt-7">
+          <button class="btn btn-primary btn-transition">
+            Apply for this job
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Content -->
+  </main>
 </template>
 
 <script>
-import AlertError from '../../components/ui/AlertError.vue'
-import LayoutDefault from '../../layouts/DefaultLayout.vue'
+import AlertError from "../../components/ui/AlertError.vue";
+import Cookies from "js-cookie";
+import { formatDistanceToNow } from "date-fns";
 
 export default {
-    components:{
-        AlertError
-    },
-    data(){
-        return {
-            job:{},
-            dataReady:false,
-            submitError:false,
-            submitErrorMessage:"",
+  components: {
+    AlertError,
+  },
+  data() {
+    return {
+      job: {},
+      dataReady: false,
+      submitError: false,
+      bookmarked: false,
+      submitErrorMessage: "",
+    };
+  },
+
+  methods: {
+    async getJob() {
+      const token = Cookies.get("com.ajobs.applicant");
+      this.job = await fetch(
+        import.meta.env.VITE_AJ_API_PATH + "/applicant/get/job",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          // credentials: "include",
+          body: JSON.stringify({
+            publicid: this.$route.params.slug,
+          }),
         }
-    },
-
-    methods:{
-        async getJob(){
-            let token = this.$cookies.get('com.bitjobs');
-            this.job = await fetch(process.env.VUE_APP_BIT_API_PATH + "/applicant/get/job",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: "Bearer " + token
-                },
-                // credentials: "include",
-                body: JSON.stringify({ 
-                    publicid:this.$route.params.slug})
-                }
-            ).then(result =>{
-
-                if(!result.ok){
-                console.log(result)
-                return result
-                }
-
-                return result.json()
-
-            })
-
-            if(this.job){
-                console.log(this.job)
-            }
-            // if(this.job){
-            //     // console.log(this.job)
-            //     // this.dataReady = true;
-            //     // this.title = this.job.title;
-            //     // this.jobType = this.job.jobtype;
-            //     // this.jobCategory = this.job.category;
-            //     // this.jobDescription = this.job.description;
-            //     // this.jobDurationStart = this.formatDate(this.job.poststartdatetime);
-            //     // this.remote = String(Number(this.job.remote));
-
-            //     // this.
-            // }
-            
-
-        },
-        cancel(){
-            
-        },
-        formatDate(dateStr){
-            const date = new Date(dateStr);
-            return date.toISOString().split('T')[0]
-        },
-        async formSubmit(e){
-            let token = this.$cookies.get('com.bitjobs');
-
-            if(!this.v$.$invalid){
-                let job = await fetch(process.env.VUE_APP_BIT_API_PATH + "/employer/edit/job",
-                      {
-                          method: "POST",
-                          headers: {
-                              "Content-Type": "application/json",
-                              Authorization: "Bearer " + token
-                          },
-                        //   credentials: "include",
-                          body: JSON.stringify({
-                              title:this.v$.title.$model,
-                              jobtype:this.v$.jobType.$model,
-                              category:this.v$.jobCategory.$model,
-                              description:this.v$.jobDescription.$model,
-                              poststartdatetime:this.v$.jobDurationStart.$model,
-                              remote:!!Number(this.v$.remote.$model),
-                              publicid: this.$route.params.slug,
-
-                          })
-                      }
-                  ).then(result =>{
-
-                      if(!result.ok){
-                        console.log(result)
-                        return result
-                      }
-
-                      return result.json()
-
-                  })
-
-                  if(job){
-                      this.title = job.title
-                    //   this.$router.go()
-                  }
-            }
-             
+      ).then((result) => {
+        if (!result.ok) {
+          console.log(result);
+          return result;
         }
-    
-    },
-    computed:{
 
-       
+        return result.json();
+      });
+    },
+    cancel() {},
+    async bookmarkJob() {
+      this.bookmarked = !this.bookmarked;
+
+      const token = Cookies.get("com.ajobs.applicant");
+
+      if (this.bookmarked) {
+        var result = await fetch(
+          import.meta.env.VITE_AJ_API_PATH + "/applicant/bookmark",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token,
+            },
+            body: JSON.stringify({
+              jobid: this.$route.params.slug,
+            }),
+          }
+        ).then((result) => {
+          if (!result.ok) {
+            console.log(result);
+          }
+
+          return result;
+        });
+      } else {
+        var result = await fetch(
+          import.meta.env.VITE_AJ_API_PATH + "/applicant/bookmark",
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token,
+            },
+            body: JSON.stringify({
+              jobid: this.$route.params.slug,
+            }),
+          }
+        ).then((result) => {
+          if (!result.ok) {
+            console.log(result);
+          }
+
+          return result;
+        });
+      }
     },
 
-    created(){
-        this.$emit('update:layout', LayoutDefault);
-        this.getJob()
-    }
-}
+    async getBookmark() {
+      const token = Cookies.get("com.ajobs.applicant");
+      const result = await fetch(
+        import.meta.env.VITE_AJ_API_PATH + "/applicant/get/bookmark",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify({
+            jobid: this.$route.params.slug,
+          }),
+        }
+      ).then((result) => {
+        if (!result.ok) {
+          console.log(result);
+        }
+
+        return result.json();
+      });
+
+      this.bookmarked = !!result || false;
+    },
+  },
+  computed: {
+    timeSincePosted: function () {
+      if (this.job.visibledate) {
+        return (
+          "Posted " +
+          formatDistanceToNow(new Date(this.job.visibledate), {
+            addSuffix: true,
+          })
+        );
+      }
+    },
+
+    jobType: function () {
+      if (this.job.jobtype) {
+        return this.job.jobtype
+          .split("-")
+          .map((word) => {
+            return word.charAt(0).toUpperCase() + word.slice(1);
+          })
+          .join(" ");
+      }
+    },
+  },
+
+  created() {
+    this.getJob();
+    this.getBookmark();
+  },
+};
 </script>
 
-<style>
-
-</style>
+<style></style>
