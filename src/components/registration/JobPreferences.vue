@@ -2,36 +2,22 @@
   <the-card id="job-preferences">
     <template v-slot:cardheader>Enter Your Job Preferences</template>
     <template v-slot:cardbody>
-      <alert-error v-if="submissionError" :message="errorMessage"></alert-error>
+      <alert-error v-if="state.submissionError" :message="state.errorMessage"></alert-error>
 
       <div class="form-group">
         <label for="titleLabel" class="input-label">Desired Cities</label>
-        <input
-          v-model="locationSearch"
-          type="text"
-          class="form-control mb-2"
-          name="location"
-          id="location"
-          aria-label="Location"
-          placeholder="Search for a City"
-          :class="{ 'is-invalid': v$.locationSearch.$error }"
-        />
+  
 
-        <select2 :options="autocompleteLocations" v-model="selectedCity">
-          <option disabled value="0">Select one</option>
-        </select2>
-
-        <div
-          class="input-errors"
-          v-for="error of v$.locationSearch.$errors"
-          :key="error.$uid"
-        >
-          <div class="error-msg">{{ error.$message }}</div>
-        </div>
+        <VueMultiselect v-model="state.desiredCities" :options="state.autocompleteLocations" :multiple="true" :searchable="true"
+          @search-change="findCities" placeholder="Type to search" label="text" track-by="id">
+          <template #noResult>
+            Oops! No elements found. Consider changing the search query.
+          </template>
+        </VueMultiselect>
 
         <p
           class="btn btn-sm btn-primary mt-2 mr-2"
-          v-for="city of desiredCities"
+          v-for="city of state.desiredCities"
           :key="city.id"
           @click="removeCity(city.text)"
         >
@@ -56,163 +42,132 @@
   </the-card>
 </template>
 
-<script>
+<script setup>
 import AlertError from "../ui/AlertError.vue";
 import TheCard from "../ui/TheCard.vue";
-import Select2 from "../ui/Select2.vue";
-import useVuelidate from "@vuelidate/core";
+import VueMultiselect from 'vue-multiselect';
 import { required, helpers } from "@vuelidate/validators";
+import {defineProps, defineEmits, reactive, watch} from 'vue';
+import {useAuthStore} from '../../stores/auth';
+import Cookies from 'js-cookie';
 
-export default {
-  props: {
-    applicant: Object,
-  },
-  setup() {
-    return {
-      v$: useVuelidate(),
-    };
-  },
-  components: {
-    TheCard,
-    AlertError,
-    Select2,
-  },
-  data() {
-    return {
-      locationSearch: "",
-      selectedCity: "",
-      autocompleteLocations: [],
-      desiredCities: [],
-      errorMessage: "",
-      submissionError: false,
-    };
-  },
-  validations() {
-    return {
-      locationSearch: {},
-      // personalInformation:{
-      //     firstname:{
-      //       required: helpers.withMessage('This field cannot be empty', required),
-      //     },
-      //     lastname:{
-      //       required: helpers.withMessage('This field cannot be empty', required),
-      //     },
-      //     email:{
-      //       required: helpers.withMessage('This field cannot be empty', required),
-      //     },
-      //     phoneNumber:{
-      //       required: helpers.withMessage('This field cannot be empty', required)
-      //     },
-      //     mobileNumber:{
-      //       required: helpers.withMessage('This field cannot be empty', required)
-      //     },
-      //     role:{
-      //       required: helpers.withMessage('This field cannot be empty', required),
-      //     },
-      //     facebook:{},
-      //     twitter:{},
-      //     instagram:{}
-      // }
-    };
-  },
-  methods: {
-    async formSubmit() {
-      if (this.v$.$invalid) {
-        this.errorMessage = "Form has errors or is missing input.";
-        this.submissionError = true;
-      } else {
-        this.submissionError = false;
-        const token =
-          this.$store.getters.getToken ||
-          this.$cookies.get("com.ajobs.applicant");
+const store = useAuthStore();
+const emit = defineEmits(['next-step']);
 
-        const result = await fetch(
-          import.meta.env.VITE_AJ_API_PATH +
-            "/applicant/update-job-preferences",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + token,
-            },
-            // credentials: "include",
-            body: JSON.stringify({
-              desiredcities: this.desiredCities,
-            }),
-          }
-        );
+const props = defineProps({
+  applicant: Object
+})
 
-        if (result.ok) {
-          this.submissionError = false;
+const state = reactive({
+  locationSearch: "",
+  selectedCity: "",
+  autocompleteLocations: [],
+  desiredCities: [],
+  errorMessage: "",
+  submissionError: false
+})
 
-          this.$emit("next-step", "registration-complete");
-        } else {
-          console.log("error");
-        }
+// watch(state.locationSearch, async (currentValue, oldValue) =>{
+ 
+// });
+
+
+
+// watch(state.selectedCity, (currentValue, oldValue) =>{
+//   // const city = this.autocompleteLocations.filter((e) => e.id == currentValue)[0];
+//   // const index = this.desiredCities.findIndex((e) => e.id == currentValue);
+
+//   // if (index === -1) {
+//   //   this.desiredCities.push(city);
+//   // }
+
+//       // this.v$.companyDetails.longitude.$model = city.longitude;
+//       // this.v$.companyDetails.latitude.$model = city.latitude;
+//       // this.v$.companyDetails.location.$model = city.text;
+// });
+
+
+async function findCities(value){
+  const token =
+    store.getToken ||
+    Cookies.get("com.ajobs.applicant");
+  const result = await fetch(
+    import.meta.env.VITE_AJ_API_PATH +
+    "/applicant/get/location/autocomplete",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify({
+        chars: value,
+      }),
+    }
+  )
+    .then((res) => {
+      if (!res.ok) {
+        console.log("problem");
       }
-    },
+      return res.json();
+    })
+    .catch((error) => {
+      console.log("error:", error);
+    });
 
-    removeCity(cityName) {
-      const index = this.desiredCities.findIndex((e) => e.text == cityName);
+  if (result && result.length > 0) {
+    const options = result.map(function (e, i) {
+      e.id = i + 1;
+      e.text = `${e.city}, ${e.state}, ${e.country}`;
 
-      if (index > -1) {
-        this.desiredCities.splice(index, 1);
+      return e;
+    });
+    state.autocompleteLocations = options;
+  }
+}
+async function formSubmit() {
+
+    state.submissionError = false;
+    const token =
+      store.getToken ||
+      Cookies.get("com.ajobs.applicant");
+
+    const result = await fetch(
+      import.meta.env.VITE_AJ_API_PATH +
+      "/applicant/update-job-preferences",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        // credentials: "include",
+        body: JSON.stringify({
+          desiredcities: state.desiredCities,
+        }),
       }
-    },
-  },
-  watch: {
-    locationSearch: async function (newVal, oldVal) {
-      const token =
-        this.$store.getters.getToken ||
-        this.$cookies.get("com.ajobs.applicant");
-      const result = await fetch(
-        import.meta.env.VITE_AJ_API_PATH +
-          "/applicant/get/location/autocomplete",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
-          body: JSON.stringify({
-            chars: newVal,
-          }),
-        }
-      )
-        .then((res) => {
-          if (!res.ok) {
-            console.log("problem");
-          }
-          return res.json();
-        })
-        .catch((error) => {
-          console.log("error:", error);
-        });
+    );
 
-      if (result && result.length > 0) {
-        const options = result.map(function (e, i) {
-          e.id = i + 1;
-          e.text = `${e.city}, ${e.state}, ${e.country}`;
+    if (result.ok) {
+      state.submissionError = false;
+      store.setRegistrationStep("registration-complete");
+      emit("next-step", "registration-complete");
+    } else {
+      state.submissionError = true;
+      state.errorMessage = (await result.json()).message;
+      
+    }
+  
+}
 
-          return e;
-        });
-        this.autocompleteLocations = options;
-      }
-    },
-    selectedCity: async function (newVal, oldVal) {
-      const city = this.autocompleteLocations.filter((e) => e.id == newVal)[0];
-      const index = this.desiredCities.findIndex((e) => e.id == newVal);
+function removeCity(cityName) {
+  const index = state.desiredCities.findIndex((e) => e.text == cityName);
 
-      if (index === -1) {
-        this.desiredCities.push(city);
-      }
+  if (index > -1) {
+    state.desiredCities.splice(index, 1);
+  }
+}
 
-      // this.v$.companyDetails.longitude.$model = city.longitude;
-      // this.v$.companyDetails.latitude.$model = city.latitude;
-      // this.v$.companyDetails.location.$model = city.text;
-    },
-  },
-};
 </script>
 
 <style lang="scss" scoped></style>

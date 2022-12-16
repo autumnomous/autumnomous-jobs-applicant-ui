@@ -2,7 +2,7 @@
   <the-card id="personal-information">
     <template v-slot:cardheader>Enter Your Personal Information</template>
     <template v-slot:cardbody>
-      <alert-error v-if="submissionError" :message="errorMessage"></alert-error>
+      <alert-error v-if="state.submissionError" :message="state.errorMessage"></alert-error>
 
       <div class="row mb-4">
         <label for="firstname" class="col-sm-3 col-form-label form-label"
@@ -195,124 +195,123 @@
   </the-card>
 </template>
 
-<script>
+
+
+<script setup>
 import AlertError from "../ui/AlertError.vue";
 import TheCard from "../ui/TheCard.vue";
 import useVuelidate from "@vuelidate/core";
 import { required, helpers } from "@vuelidate/validators";
+import {defineProps, reactive, defineEmits} from 'vue';
+import {useAuthStore} from '../../stores/auth';
 
-export default {
-  props: {
-    applicant: Object,
-  },
-  setup() {
-    return {
-      v$: useVuelidate(),
-    };
-  },
-  components: {
-    TheCard,
-    AlertError,
-  },
-  data() {
-    return {
-      personalInformation: {
-        firstname: this.applicant.firstname,
-        lastname: this.applicant.lastname,
-        email: this.applicant.email,
-        phoneNumber: this.applicant.phonenumber,
-        address: this.applicant.address,
-        city: this.applicant.city,
-        state: this.applicant.state,
-        zipcode: this.applicant.zipcode,
-        // facebook:"",
-        // twitter:"",
-        // instagram:""
-      },
-      errorMessage: "",
-      submissionError: false,
-    };
-  },
-  validations() {
-    return {
-      personalInformation: {
-        firstname: {
-          required: helpers.withMessage("This field cannot be empty", required),
-        },
-        lastname: {
-          required: helpers.withMessage("This field cannot be empty", required),
-        },
-        email: {
-          required: helpers.withMessage("This field cannot be empty", required),
-        },
-        phoneNumber: {
-          required: helpers.withMessage("This field cannot be empty", required),
-        },
-        address: {
-          required: helpers.withMessage("This field cannot be empty", required),
-        },
-        city: {
-          required: helpers.withMessage("This field cannot be empty", required),
-        },
-        state: {
-          required: helpers.withMessage("This field cannot be empty", required),
-        },
-        zipcode: {
-          required: helpers.withMessage("This field cannot be empty", required),
-        },
-        facebook: {},
-        twitter: {},
-        instagram: {},
-      },
-    };
-  },
-  methods: {
-    async formSubmit() {
-      if (this.v$.$invalid) {
-        this.errorMessage = "Form has errors or is missing input.";
-        this.submissionError = true;
-      } else {
-        this.submissionError = false;
-        const token =
-          this.$store.getters.getToken ||
-          this.$cookies.get("com.ajobs.applicant");
+const emit = defineEmits(['next-step']);
+const store = useAuthStore();
 
-        const result = await fetch(
-          import.meta.env.VITE_AJ_API_PATH + "/applicant/update-account",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + token,
-            },
-            // credentials: "include",
-            body: JSON.stringify({
-              firstname: this.v$.personalInformation.firstname.$model,
-              lastname: this.v$.personalInformation.lastname.$model,
-              email: this.v$.personalInformation.email.$model,
-              phonenumber: this.v$.personalInformation.phoneNumber.$model,
-              address: this.v$.personalInformation.address.$model,
-              city: this.v$.personalInformation.city.$model,
-              state: this.v$.personalInformation.state.$model,
-              zipcode: this.v$.personalInformation.zipcode.$model,
-              // facebook:  this.v$.personalInformation.facebook.$model,
-              // twitter: this.v$.personalInformation.twitter.$model,
-              // instagram: this.v$.personalInformation.instagram.$model
-            }),
-          }
-        );
+const props = defineProps({
+  applicant: Object
+});
 
-        if (result.ok) {
-          this.submissionError = false;
+const state = reactive({
+  personalInformation: {
+    firstname: props.applicant.firstname,
+    lastname: props.applicant.lastname,
+    email: props.applicant.email,
+    phoneNumber: props.applicant.phonenumber,
+    address: props.applicant.address,
+    city: props.applicant.city,
+    state: props.applicant.state,
+    zipcode: props.applicant.zipcode,
+    // facebook:"",
+    // twitter:"",
+    // instagram:""
+  },
+  errorMessage: "",
+  submissionError: false,
+});
 
-          this.$emit("next-step", "job-preferences");
-        } else {
-          console.log("error");
-        }
-      }
+
+const validationRules = {
+  personalInformation: {
+    firstname: {
+      required: helpers.withMessage("This field cannot be empty", required),
     },
-  },
+    lastname: {
+      required: helpers.withMessage("This field cannot be empty", required),
+    },
+    email: {
+      required: helpers.withMessage("This field cannot be empty", required),
+    },
+    phoneNumber: {
+      required: helpers.withMessage("This field cannot be empty", required),
+    },
+    address: {
+      required: helpers.withMessage("This field cannot be empty", required),
+    },
+    city: {
+      required: helpers.withMessage("This field cannot be empty", required),
+    },
+    state: {
+      required: helpers.withMessage("This field cannot be empty", required),
+    },
+    zipcode: {
+      required: helpers.withMessage("This field cannot be empty", required),
+    },
+    facebook: {},
+    twitter: {},
+    instagram: {},
+  }
 };
+
+const v$ = useVuelidate(validationRules, state);
+
+async function formSubmit() {
+  if (v$.$invalid) {
+    state.errorMessage = "Form has errors or is missing input.";
+    state.submissionError = true;
+  } else {
+    state.submissionError = false;
+    const token =
+      store.getToken ||
+      Cookies.get("com.ajobs.applicant");
+
+    const result = await fetch(
+      import.meta.env.VITE_AJ_API_PATH + "/applicant/update-account",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        // credentials: "include",
+        body: JSON.stringify({
+          firstname: state.personalInformation.firstname,
+          lastname: state.personalInformation.lastname,
+          email: state.personalInformation.email,
+          phonenumber: state.personalInformation.phoneNumber,
+          address: state.personalInformation.address,
+          city: state.personalInformation.city,
+          state: state.personalInformation.state,
+          zipcode: state.personalInformation.zipcode,
+          // facebook:  this.v$.personalInformation.facebook.$model,
+          // twitter: this.v$.personalInformation.twitter.$model,
+          // instagram: this.v$.personalInformation.instagram.$model
+        }),
+      }
+    );
+
+    if (result.ok) {
+      state.submissionError = false;
+      store.setRegistrationStep("job-preferences");
+      emit("next-step", "job-preferences");
+    } else {
+      state.submissionError = true;
+      state.errorMessage = (await result.json()).message;
+    }
+  }
+}
 </script>
+
+
 
 <style lang="scss" scoped></style>

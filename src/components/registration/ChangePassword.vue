@@ -1,13 +1,11 @@
 <template>
   <the-card id="update-password" :active="true">
-    <template v-slot:cardheader>{{ headerText }}</template>
+    <template v-slot:cardheader>{{ props.headerText }}</template>
     <template v-slot:cardbody>
-      <alert-error v-if="submissionError" :message="errorMessage"></alert-error>
+      <alert-error v-if="state.submissionError" :message="state.errorMessage"></alert-error>
 
       <div class="form-group">
-        <label for="currentpassword" class="input-label"
-          >Current Password</label
-        >
+        <label for="currentpassword" class="input-label">Current Password</label>
 
         <input
           v-model.lazy="v$.password.current.$model"
@@ -93,7 +91,8 @@
   </the-card>
 </template>
 
-<script>
+
+<script setup>
 import AlertError from "../ui/AlertError.vue";
 import TheCard from "../ui/TheCard.vue";
 import useVuelidate from "@vuelidate/core";
@@ -104,132 +103,137 @@ import {
   sameAs,
   url,
 } from "@vuelidate/validators";
-export default {
-  setup() {
-    return {
-      v$: useVuelidate(),
-    };
+import {reactive, computed, defineProps, defineEmits} from 'vue';
+import {useAuthStore} from '../../stores/auth';
+import Cookies from 'js-cookie';
+
+const emit = defineEmits(['next-step']);
+const store = useAuthStore();
+
+const props = defineProps({
+  buttonText: {
+    type: String,
+    default: "Save and continue",
   },
-  props: {
-    buttonText: {
-      type: String,
-      default: "Save and continue",
-    },
-    headerText: {
-      type: String,
-      default: "Update Password",
-    },
-    emitNextStep: {
-      type: Boolean,
-      default: true,
-    },
+  headerText: {
+    type: String,
+    default: "Update Password",
   },
-  components: {
-    TheCard,
-    AlertError,
+  emitNextStep: {
+    type: Boolean,
+    default: true,
   },
-  data() {
-    return {
-      password: {
-        current: "",
-        new: "",
-        confirm: "",
+});
+
+const state = reactive({
+  password: {
+    current: "",
+    new: "",
+    confirm: "",
+  },
+  errorMessage: "",
+  submissionError: false,
+  formSubmitted: false,
+});
+
+const passwordConfirmRef = computed(()=> state.password.confirm);
+const validationRules = {
+    password: {
+      current: {
+        required: helpers.withMessage("This field cannot be empty", required),
       },
-      errorMessage: "",
-      submissionError: false,
-      formSubmitted: false,
-    };
-  },
-  validations() {
-    return {
-      password: {
-        current: {
-          required: helpers.withMessage("This field cannot be empty", required),
-        },
-        new: {
-          required: helpers.withMessage("This field cannot be empty", required),
-          minLength: helpers.withMessage(
-            "Password must be at least 6 characters long.",
-            minLength(6)
-          ),
+      new: {
+        required: helpers.withMessage("This field cannot be empty", required),
+        minLength: helpers.withMessage(
+          "Password must be at least 6 characters long.",
+          minLength(6)
+        ),
 
-          containsUppercase: helpers.withMessage(
-            "Password must contain at least 1 uppercase letter.",
-            function (value) {
-              return /[A-Z]/.test(value);
-            }
-          ),
-          containsLowercase: helpers.withMessage(
-            "Password must contain at least 1 lowercase letter.",
-            function (value) {
-              return /[a-z]/.test(value);
-            }
-          ),
-          containsNumber: helpers.withMessage(
-            "Password must contain at least 1 number.",
-            function (value) {
-              return /[0-9]/.test(value);
-            }
-          ),
-          containsSpecial: helpers.withMessage(
-            "Password must contain at least one of the following: #?!@$%^&*- .",
-            function (value) {
-              return /[#?!@$%^&*-]/.test(value);
-            }
-          ),
-        },
-        confirm: {
-          required: helpers.withMessage("This field cannot be empty", required),
-          sameAsPassword: helpers.withMessage(
-            "Must match the New Password field.",
-            sameAs(this.password.new)
-          ),
-        },
+        containsUppercase: helpers.withMessage(
+          "Password must contain at least 1 uppercase letter.",
+          function (value) {
+            return /[A-Z]/.test(value);
+          }
+        ),
+        containsLowercase: helpers.withMessage(
+          "Password must contain at least 1 lowercase letter.",
+          function (value) {
+            return /[a-z]/.test(value);
+          }
+        ),
+        containsNumber: helpers.withMessage(
+          "Password must contain at least 1 number.",
+          function (value) {
+            return /[0-9]/.test(value);
+          }
+        ),
+        containsSpecial: helpers.withMessage(
+          "Password must contain at least one of the following: #?!@$%^&*- .",
+          function (value) {
+            return /[#?!@$%^&*-]/.test(value);
+          }
+        ),
       },
-    };
-  },
-  methods: {
-    async formSubmit() {
-      if (this.v$.$invalid) {
-        this.errorMessage = "Form has errors or is missing input.";
-        this.submissionError = true;
-      } else {
-        const token =
-          this.$store.getters.getToken ||
-          this.$cookies.get("com.ajobs.applicant");
-        const result = await fetch(
-          import.meta.env.VITE_AJ_API_PATH + "/applicant/update-password",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + token,
-            },
-            // credentials: "include",
-            body: JSON.stringify({
-              newpassword: this.v$.password.new.$model,
-              password: this.v$.password.current.$model,
-            }),
-          }
-        );
+      confirm: {
+        required: helpers.withMessage("This field cannot be empty", required),
+        sameAsPassword: helpers.withMessage(
+          "Must match the New Password field.",
+          sameAs(passwordConfirmRef)
+        ),
+      },
+    }
+}
 
-        if (result.ok) {
-          this.submissionError = false;
+const v$ = useVuelidate(validationRules, state);
 
-          if (this.emitNextStep) {
-            this.$emit("next-step", "personal-information");
-          } else {
-            this.newpassword = "";
-            this.password = "";
-            this.confirm = "";
-          }
-        } else {
-          console.log("error");
-        }
+async function formSubmit() {
+  if (v$.$invalid) {
+    state.errorMessage = "Form has errors or is missing input.";
+    state.submissionError = true;
+  } else {
+    const token =
+      store.getToken ||
+      Cookies.get("com.ajobs.applicant");
+    const result = await fetch(
+      import.meta.env.VITE_AJ_API_PATH + "/applicant/update-password",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        // credentials: "include",
+        body: JSON.stringify({
+          newpassword: state.password.new,
+          password:state.password.current,
+        }),
       }
-    },
-  },
-};
+    );
+
+    if(result){
+      if (result.ok) {
+        state.submissionError = false;
+        
+        if (props.emitNextStep) {
+          store.setRegistrationStep("personal-information");
+          emit("next-step", "personal-information");
+        } else {
+          state.password.new = "";
+          state.password.current = "";
+          this.password.confirm = "";
+        }
+      } else {
+        // TODO: return a helpful message if the current password is incorrect
+        state.submissionError = true;
+        state.errorMessage = (await result.json()).message;
+
+      }
+    }
+    
+  }
+}
+
 </script>
+
 
 <style lang="scss" scoped></style>
