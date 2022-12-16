@@ -96,9 +96,7 @@ import AuthLayout from "../layouts/AuthLayout.vue";
 import useVuelidate from "@vuelidate/core";
 import { required, minLength, email } from "@vuelidate/validators";
 import { useAuthStore } from "../stores/auth";
-import { reactive } from "vue";
-import { onMounted } from "vue";
-import { defineEmits } from "vue";
+import { reactive, onMounted, defineEmits} from "vue";
 import { useRouter } from 'vue-router'
 
 const router = useRouter();

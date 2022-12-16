@@ -57,15 +57,15 @@
             </div>
             <!-- End Sticky Block -->
           </div>
-
-          <div id="formContainer" class="col-lg-8" v-show="!formSubmitted">
+          
+          <div id="formContainer" class="col-lg-8" v-show="!state.formSubmitted">
             <!-- Content Step Form -->
             <div id="postJobStepFormContent">
               <component
-                :is="activeStep"
+                :is="state.stepComponents[state.activeStep]"
                 @next-step="nextStep"
-                :applicant="applicant"
-                :active="activeStep"
+                :applicant="state.applicant"
+                :active="state.activeStep"
               ></component>
             </div>
             <!-- End Content Step Form -->
@@ -82,75 +82,75 @@
   </main>
 </template>
 
-<script>
+<script setup>
+
 import CoverRow from "../components/ui/auth/CoverRow.vue";
 import AlertError from "../components/ui/AlertError.vue";
 import TheCard from "../components/ui/TheCard.vue";
-
 import ChangePassword from "../components/registration/ChangePassword.vue";
 import PersonalInformation from "../components/registration/PersonalInformation.vue";
 import JobPreferences from "../components/registration/JobPreferences.vue";
 import RegistrationComplete from "../components/registration/RegistrationComplete.vue";
 import Cookies from "js-cookie";
+import { useAuthStore } from "../stores/auth";
+import {reactive, onMounted} from "vue";
 
-export default {
-  async created() {
-    this.token = Cookies.get("com.ajobs.applicant");
 
-    this.applicant = await fetch(
-      import.meta.env.VITE_AJ_API_PATH + "/applicant/get",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + this.token,
-        },
-      }
-    ).then((result) => {
-      if (!result.ok) {
-        console.log(result);
-        return result;
-      }
-      return result.json();
-    });
+const store = useAuthStore();
 
-    if (this.applicant) {
-      this.activeStep =
-        this.$store.getters.getRegistrationStep ||
-        this.applicant.registrationstep;
+const state = reactive({
+  stepComponents:{
+    "change-password":ChangePassword,
+    "personal-information":PersonalInformation,
+    "job-preferences":JobPreferences,
+    "registration-complete":RegistrationComplete
+  },
+  steps: [
+    "change-password",
+    "personal-information",
+    "job-preferences",
+    "registration-complete",
+  ],
+  activeStep: "",
+  applicant: {},
+  token: "",
+  errorMessage: "",
+  submissionError: false,
+  formSubmitted: false,
+})
+
+
+onMounted(async ()=>{
+  state.token = Cookies.get("com.ajobs.applicant");
+
+  state.applicant = await fetch(
+    import.meta.env.VITE_AJ_API_PATH + "/applicant/get",
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + state.token,
+      },
     }
-  },
-  components: {
-    CoverRow,
-    AlertError,
-    TheCard,
-    ChangePassword,
-    PersonalInformation,
-    JobPreferences,
-    RegistrationComplete,
-  },
-  data() {
-    return {
-      steps: [
-        "change-password",
-        "personal-information",
-        "job-preferences",
-        "registration-complete",
-      ],
-      activeStep: "",
-      applicant: {},
-      token: "",
-      errorMessage: "",
-      submissionError: false,
-      formSubmitted: false,
-    };
-  },
-  methods: {
-    nextStep(nextStep) {
-      this.activeStep = this.steps.find((el) => el == nextStep);
-    },
-  },
-};
+  ).then((result) => {
+    if (!result.ok) {
+      return result;
+    }
+    return result.json();
+  });
+
+  if (state.applicant) {
+    state.activeStep =
+      store.getRegistrationStep ||
+      state.applicant.registrationstep;
+  }
+})
+
+function nextStep(nextStep) {
+  state.activeStep = state.steps.find((el) => el == nextStep);
+}
+
 </script>
+
 
 <style scoped></style>
